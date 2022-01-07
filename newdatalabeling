@@ -1,0 +1,532 @@
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <io.h>
+#include <Windows.h>
+
+struct _finddata_t fd;
+
+#define filename "a.bat"
+
+int isFileOrDir()
+{
+    if (fd.attrib & _A_SUBDIR)
+        return 0; // 디렉토리면 0 
+    else
+        return 1; // 파일이면 1
+}
+
+typedef struct COUNT {
+    int count;
+    int personCount;
+}COUNT;
+
+
+COUNT Live(char high_path[], char file_name[], COUNT c)
+{    
+
+    intptr_t handle;
+    int check = 0;
+    char file_path[_MAX_PATH] = high_path;
+    char file_path2[_MAX_PATH];
+
+    strcat(file_path, "\\");
+    strcpy(file_path2, file_path);
+    strcat(file_path, "*");
+
+    char A[3]][10] = {
+        "Traning",
+        "Test",
+        "Evaluation"
+    };
+    char B[2][10] = {
+        "Fake",
+        "Live"
+    };
+    char Live[3][10] = {
+        "General",
+        "Dry",
+        "Wet"
+    };
+    char Fake[31][20] = {
+        "Bodydouble",
+        "DragonSkin_skintone",
+        "DragonSkin_trans",
+        "Ecoflex_skintone",
+        "Ecoflex_trans",
+        "Ecoflex_white",
+        "Latex",
+        "Paper",
+        "Silicon_skintone",
+        "Silicon_trans",
+        "Silicon_white",
+        "Vytaflex_31",
+        "Woodglue",
+        "3D_Bodydouble",
+        "3D_Ecoflex_skintone",
+        "3D_Ecoflex_trans",
+        "3D_Ecoflex_white",
+        "3D_PDMS",
+        "3D_Rudder",
+        "3D_Silicon_skintone",
+        "3D_Silicon_trans",
+        "3D_Silicon_white",
+        "PC_Bodydouble",
+        "PC_DragonSkin",
+        "PC_Ecoflex_skintone",
+        "PC_Ecoflex_white",
+        "PC_PDMS",
+        "PC_Rudder",
+        "PC_Silicon_skintone",
+        "PC_Silicon_trans",
+        "PC_Silicon_white"
+    };
+
+    int person;
+    char finger[100], gdw[100];
+    char* GDW;
+    char* FINGER;
+    char* MOLD;
+    char* MATERIAL;
+    char* COLOR;
+    int count = c.count;
+    int personCount = c.personCount;
+    int isPerson1[100] = { 0, };
+    int isPerson2[100] = { 0, };
+
+    for (int a = 0;a < 3;a++) {
+        if (a == 0) {
+            FINGER = 'L';
+        }else if (a == 1) {
+            FINGER = 'R';
+        }else {
+            FINGER = "None";
+        }
+
+        for (int b = 0;b < 2;b++) {
+            for (int l = 0;l < 3;l++) {
+                if (l == 0) {
+                    GDW = 'G';
+                }else if (l == 1) {
+                    GDW = 'D';
+                }else if (l == 2) {
+                    GDW = 'W';
+                }
+            }
+            for (int f = 0;f < 31;f++) {
+                if (f >= 0 && f < 13) {
+                    MOLD = 'Glue';
+                }else if (f >= 13 && f < 22) {
+                    MOLD = '3D';
+                }else if (f >= 22 && f < 31) {
+                    MOLD = 'PC';
+                }
+                if()
+            }
+
+        }
+    }
+    
+
+
+
+
+    char newfile[_MAX_PATH] = "";
+    strcpy(newfile, file_path);
+    strcat(newfile, "\\");
+    strcat(newfile, file_name);
+
+    FILE* fp = fopen(newfile, "wt");
+
+    if ((handle = _findfirst(file_path, &fd)) == -1)
+    {
+        printf("%s", &file_name);
+        printf("No such file or directory\n");
+
+        return;
+    }
+
+
+
+}
+
+
+
+/*
+COUNT Live(char file_path[], char file_name[] , char NAME[], char GDW[], COUNT c)
+{
+    char newfile[_MAX_PATH] = "";
+    strcpy(newfile, file_path);
+    strcat(newfile, "\\");
+    strcat(newfile, file_name);
+
+    intptr_t handle;
+    int check = 0;
+    char file_path2[_MAX_PATH];
+
+    strcat(file_path, "\\");
+    strcpy(file_path2, file_path);
+    strcat(file_path, "*");
+
+    FILE* fp = fopen(newfile, "wt");
+
+    if ((handle = _findfirst(file_path, &fd)) == -1)
+    {
+        printf("%s", &file_name);
+        printf("No such file or directory\n");
+       
+        return;
+    }
+
+    int x, y, z, person, num[20]; 
+    char name[100], finger[100], gdw[100]; 
+    int count = c.count;
+    int personCount = c.personCount;
+    int isPerson1[100] = { 0, };
+    int isPerson2[100] = { 0, };
+
+    while (_findnext(handle, &fd) == 0)
+    {
+        char file_pt[_MAX_PATH];
+        strcpy(file_pt, file_path2);
+        strcat(file_pt, fd.name);
+        
+        check = isFileOrDir();    //파일인지 디렉토리 인지 식별
+        
+        if (check == 0 && fd.name[0] != '.')
+        {
+            Live(file_pt, file_name, "BMS3", "G", "L", c);    //하위 디렉토리 검색 재귀함수
+        }
+        else if (check == 1 && fd.size != 0 && fd.name[0] != '.')
+        {
+            fprintf(fp, "ren %s ", fd.name);
+
+            int num = 0;// '_'의 개수
+            /*  _->공백으로 변경  */
+            char* ptr = strchr(fd.name, '_'); // _로 시작하는 문자 검색
+            while (ptr != NULL) // 검색된 문자가 없을 때까지 반복
+            {   
+                *ptr = ' ';  // 공백로 변경
+                ptr = strchr(ptr + 1, '_'); // 리턴된 포인터 +1 계속 검색
+                num++; 
+            }
+
+            /* 000_0000 */
+            if (num==1) {
+                    sscanf(fd.name, "%d %d", &person, &x);
+                    count++;
+
+                    if (isPerson1[person] == 0) {
+                        isPerson1[person] = ++personCount;
+                    }
+                    fprintf(fp, "%s_%s_%s_%04d_%05d.bmp\n", NAME, GDW, FINGER, isPerson1[person], count);;
+            }
+            else if(num==7)
+            {
+                    sscanf(fd.name, "%d %d %s %d %d %s %s %d", &x, &y, name, &z, &person, finger, gdw, &num);
+                    count++;
+                
+                    if (isPerson2[person] == 0) {
+                        isPerson2[person] = ++personCount;
+                    }
+                    fprintf(fp, "%s_%s_%s_%04d_%05d.bmp\n", name, gdw, finger,isPerson2[person], count);
+            }
+        }
+    }
+    _findclose(handle);
+    c.count = count;
+    c.personCount = personCount;
+
+    return c;
+}
+COUNT Fake(char file_path[], char file_name[], char NAME[], char BOLD[], char MATERIAL[], char COLOR[], char GDW[], COUNT c)
+{
+    char newfile[_MAX_PATH] = "";
+    strcpy(newfile, file_path);
+    strcat(newfile, "\\");
+    strcat(newfile, file_name);
+
+    intptr_t handle;
+    int check = 0;
+    char file_path2[_MAX_PATH];
+
+    strcat(file_path, "\\");
+    strcpy(file_path2, file_path);
+    strcat(file_path, "*");
+
+    FILE* fp = fopen(newfile, "wt");
+
+    if ((handle = _findfirst(file_path, &fd)) == -1)
+    {
+        printf("No such file or directory\n");
+        return;
+    }
+
+    int x, y, z, person, num[20];
+    char name[100], bold[100], material[100], color[100], finger[100], gdw[100];
+    int count = c.count;
+    int personCount = c.personCount;
+    int isPerson1[100] = { 0, };
+    int isPerson2[100] = { 0, };
+
+    while (_findnext(handle, &fd) == 0)
+    {
+        char file_pt[_MAX_PATH];
+        strcpy(file_pt, file_path2);
+        strcat(file_pt, fd.name);
+
+        check = isFileOrDir();    //파일인지 디렉토리 인지 식별
+
+        if (check == 0 && fd.name[0] != '.')
+        {
+            Live(file_pt, file_name, "BMS3", "G", "L", c);    //하위 디렉토리 검색 재귀함수
+        }
+        else if (check == 1 && fd.size != 0 && fd.name[0] != '.')
+        {
+            fprintf(fp, "ren %s ", fd.name);
+
+            int n = 0;// '_'의 개수
+            /*  _->공백으로 변경  */
+            char* ptr = strchr(fd.name, '_'); // _로 시작하는 문자 검색
+            while (ptr != NULL) // 검색된 문자가 없을 때까지 반복
+            {
+                *ptr = ' ';  // 공백로 변경
+                ptr = strchr(ptr + 1, '_'); // 리턴된 포인터 +1 계속 검색
+                n++;
+            }
+
+            /* 000_0000 */
+            if (n == 1) {
+                sscanf(fd.name, "%d %d", &person, &x);
+                    count++;
+
+                    if (isPerson1[person] == 0) {
+                        isPerson1[person] = ++personCount;
+                    }
+                    fprintf(fp, "%s_%s_%s_%s_%s_%s_%04d_%05d.bmp\n", NAME, BOLD, MATERIAL, COLOR, GDW, FINGER, isPerson1[person], count);
+
+            }
+            else if (n == 8)
+            {
+                sscanf(fd.name, "%d %d %s %d %s %d %s %s %d", &x, &y, name, &z, material, &person, finger, gdw, &num);
+                    count++;
+
+                    if (isPerson2[person] == 0) {
+                        isPerson2[person] = ++personCount;
+                    }
+                    fprintf(fp, "%s_%s_%s_%s_%s_%s_%04d_%05d.bmp\n", name, BOLD, material, COLOR, gdw, finger, isPerson2[person], count);
+            }
+            else if (n == 9)
+            {
+                sscanf(fd.name, "%d %d %s %d %s %s %d %s %s %d", &x, &y, name, &z, bold, material, &person, finger, gdw, &num);
+                    count++;
+
+                    if (isPerson2[person] == 0) {
+                        isPerson2[person] = ++personCount;
+                    }
+                    fprintf(fp, "%s_%s_%s_%s_%s_%s_%04d_%05d.bmp\n", name, bold, material, COLOR, gdw, finger, isPerson2[person], count);
+
+            }
+            else if (n == 10)
+            {
+                    sscanf(fd.name, "%d %d %s %d %s %s %s %d %s %s %d", &x, &y, name, &z, bold, material, color, &person, finger, gdw, &num);
+                    count++;
+
+                    if (isPerson2[person] == 0) {
+                        isPerson2[person] = ++personCount;
+                    }
+                    fprintf(fp, "%s_%s_%s_%s_%s_%s_%04d_%05d.bmp\n", name, bold, material, color, gdw, finger, isPerson2[person], count);
+
+            }
+        }
+    }
+    _findclose(handle);
+    c.count = count;
+    c.personCount = personCount;
+
+    return c;
+}*/
+int main()
+{
+    COUNT c, a;
+    c.count = 0;
+    c.personCount = 0;
+    char* path;
+    char* highpath;
+    char* lowpath;
+    
+    scanf("%s", highpath);
+    
+
+    /*  LIVE   
+    char BMS3_G_L[_MAX_PATH] = "c:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Live\\General";
+    c = Live(BMS3_G_L, filename, "BMS3", "G", "L", c);
+    printf("%d %d\n", c.count, c.personCount);
+    char BMS3_D_L[_MAX_PATH] = "c:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Live\\Dry";
+    c = Live(BMS3_D_L, filename, "BMS3", "D", "L", c);
+    printf("%d %d\n", c.count, c.personCount);
+    char BMS3_W_L[_MAX_PATH] = "c:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Live\\Wet";   
+    c = Live(BMS3_W_L, filename, "BMS3", "W", "L", c);
+    printf("%d %d\n", c.count, c.personCount); */
+
+    /*  FAKE Glue 
+    char BMS3_Glue_B[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\Bodydouble";
+    c = Fake(BMS3_Glue_B, filename, "BMS3", "Glue","B","None", "None", "L", c);
+    printf("%d %d\n", c.count, c.personCount);
+    char BMS3_Glue_D_S[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\DragonSkin_skintone";
+    c = Fake(BMS3_Glue_D_S, filename, "BMS3", "Glue", "D", "S", "None", "L", c);
+    printf("%d %d\n", c.count, c.personCount);
+    char BMS3_Glue_D_T[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\DragonSkin_trans";
+    c = Fake(BMS3_Glue_D_T, filename, "BMS3", "Glue", "D", "T", "None", "L", c);
+    printf("%d %d\n", c.count, c.personCount);
+    char BMS3_Glue_Si2_S[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\Ecoflex_skintone";
+    c = Fake(BMS3_Glue_Si2_S, filename, "BMS3", "Glue", "Si2", "S", "None", "L", c);
+    printf("%d %d\n", c.count, c.personCount);
+    char BMS3_Glue_Si2_T[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\Ecoflex_trans";
+    c = Fake(BMS3_Glue_Si2_T, filename, "BMS3", "Glue", "Si2", "T", "None", "L", c);
+    printf("%d %d\n", c.count, c.personCount);
+    char BMS3_Glue_Si2_W[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\Ecoflex_white";
+    c = Fake(BMS3_Glue_Si2_W, filename, "BMS3", "Glue", "Si2", "W", "None", "L", c);
+    printf("%d %d\n", c.count, c.personCount);
+    char BMS3_Glue_L[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\Latex";
+    c = Fake(BMS3_Glue_L, filename, "BMS3", "Glue", "L", "None", "None", "L", c);
+    printf("%d %d\n", c.count, c.personCount);
+    char BMS3_Glue_P[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\Paper";
+    c = Fake(BMS3_Glue_P, filename, "BMS3", "Glue", "P", "None", "None", "L", c);
+    printf("%d %d\n", c.count, c.personCount);
+    char BMS3_Glue_Si_S[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\Silicone_skintone";
+    c = Fake(BMS3_Glue_Si_S, filename, "BMS3", "Glue", "Si", "S", "None", "L", c);
+    printf("%d %d\n", c.count, c.personCount);
+    char BMS3_Glue_Si_T[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\Silicone_trans";
+    c = Fake(BMS3_Glue_Si_T, filename, "BMS3", "Glue", "Si", "T", "None", "L", c);
+    printf("%d %d\n", c.count, c.personCount);
+    char BMS3_Glue_Si_W[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\Silicone_white";
+    c = Fake(BMS3_Glue_Si_W, filename, "BMS3", "Glue", "Si", "W", "None", "L", c);
+    printf("%d %d\n", c.count, c.personCount);
+    char BMS3_Glue_V[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\Vytaflex_31";
+    c = Fake(BMS3_Glue_V, filename, "BMS3", "Glue", "V", "None", "None", "L", c);
+    printf("%d %d\n", c.count, c.personCount);
+    char BMS3_Glue_G[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\Woodglue";
+    c = Fake(BMS3_Glue_G, filename, "BMS3", "Glue", "G", "None", "None", "L", c);
+    printf("%d %d\n", c.count, c.personCount);*/
+
+    /*  FAKE 3D 
+    char BMS3_3D_B[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\3D_Bodydouble";
+    c = Fake(BMS3_3D_B, filename, "BMS3", "3D", "B", "None", "None", "L", c);
+    char BMS3_3D_Si2_S[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\3D_Ecoflex_skintone";
+    c = Fake(BMS3_3D_Si2_S, filename, "BMS3", "3D", "Si2", "S", "None", "L", c);
+    char BMS3_3D_Si2_T[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\3D_Ecoflex_trans";
+    c = Fake(BMS3_3D_Si2_T, filename, "BMS3", "3D", "Si2", "T", "None", "L", c);
+    char BMS3_3D_Si2_W[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\3D_Ecoflex_white";
+    c = Fake(BMS3_3D_Si2_W, filename, "BMS3", "3D", "Si2", "W", "None", "L", c);
+    char BMS3_3D_PDMS[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\3D_PDMS";
+    c = Fake(BMS3_3D_PDMS, filename, "BMS3", "3D", "PDMS", "None", "None", "L", c);
+    char BMS3_3D_R[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\3D_Rubber";
+    c = Fake(BMS3_3D_R, filename, "BMS3", "3D", "R", "None", "None", "L", c);
+    char BMS3_3D_Si_S[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\3D_Silicone_skintone";
+    c = Fake(BMS3_3D_Si_S, filename, "BMS3", "3D", "Si", "S", "None", "L", c);
+    char BMS3_3D_Si_T[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\3D_Silicone_trans";
+    c = Fake(BMS3_3D_Si_T, filename, "BMS3", "3D", "Si", "T", "None", "L", c);
+    char BMS3_3D_Si_W[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\3D_Silicone_white";
+    c = Fake(BMS3_3D_Si_W, filename, "BMS3", "3D", "Si", "W", "None", "L", c);*/
+
+    /*  FAKE PC  
+    char BMS3_PC_B[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\PC_Bodydouble";
+    c = Fake(BMS3_PC_B, filename, "BMS3", "PC", "B", "None", "None", "L", c);
+    char BMS3_PC_D[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\PC_DragonSkin";
+    c = Fake(BMS3_PC_D, filename, "BMS3", "PC", "D", "None", "None", "L", c);
+    char BMS3_PC_Si2_S[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\PC_Ecoflex_skintone";
+    c = Fake(BMS3_PC_Si2_S, filename, "BMS3", "PC", "Si2", "S", "None", "L", c);
+    char BMS3_PC_Si2_W[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\PC_Ecoflex_white";
+    c = Fake(BMS3_PC_Si2_W, filename, "BMS3", "PC", "Si2", "W", "None", "L", c);
+    char BMS3_PC_PDMS[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\PC_PDMS";
+    c = Fake(BMS3_PC_PDMS, filename, "BMS3", "PC", "PDMS", "None", "None", "L", c);
+    char BMS3_PC_R[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\PC_Rubber";
+    c = Fake(BMS3_PC_R, filename, "BMS3", "PC", "R", "None", "None", "L", c);
+    char BMS3_PC_Si_S[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\PC_Silicone_skintone";
+    c = Fake(BMS3_PC_Si_S, filename, "BMS3", "PC", "Si", "S", "None", "L", c);
+    char BMS3_PC_Si_T[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\PC_Silicone_trans";
+    c = Fake(BMS3_PC_Si_T, filename, "BMS3", "PC", "Si", "T", "None", "L", c);
+    char BMS3_PC_Si_W[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Training\\Fake\\PC_Silicone_white";
+    c = Fake(BMS3_PC_Si_W, filename, "BMS3", "PC", "Si", "W", "None", "L", c);*/
+
+    /*  LIVE   
+    char BMS3_TEST_G_L[_MAX_PATH] = "c:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Live\\General";
+    c = Live(BMS3_TEST_G_L, filename, "BMS3", "G", "R", c);
+    char BMS3_TEST_D_L[_MAX_PATH] = "c:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Live\\Dry";
+    c = Live(BMS3_TEST_D_L, filename, "BMS3", "D", "R", c);
+    char BMS3_TEST_W_L[_MAX_PATH] = "c:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Live\\Wet";
+    c = Live(BMS3_TEST_W_L, filename, "BMS3", "W", "R", c);*/
+
+    /*  FAKE Glue 
+    char BMS3_TEST_Glue_B[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\Bodydouble";
+    c = Fake(BMS3_TEST_Glue_B, filename, "BMS3", "Glue", "B", "None", "None", "R", c);
+    char BMS3_TEST_Glue_D_S[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\DragonSkin_skintone";
+    c = Fake(BMS3_TEST_Glue_D_S, filename, "BMS3", "Glue", "D", "S", "None", "R", c);
+    char BMS3_TEST_Glue_D_T[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\DragonSkin_trans";
+    c = Fake(BMS3_TEST_Glue_D_T, filename, "BMS3", "Glue", "D", "T", "None", "R", c);
+    char BMS3_TEST_Glue_Si2_S[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\Ecoflex_skintone";
+    c = Fake(BMS3_TEST_Glue_Si2_S, filename, "BMS3", "Glue", "Si2", "S", "None", "R", c);
+    char BMS3_TEST_Glue_Si2_T[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\Ecoflex_trans";
+    c = Fake(BMS3_TEST_Glue_Si2_T, filename, "BMS3", "Glue", "Si2", "T", "None", "R", c);
+    char BMS3_TEST_Glue_Si2_W[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\Ecoflex_white";
+    c = Fake(BMS3_TEST_Glue_Si2_W, filename, "BMS3", "Glue", "Si2", "W", "None", "R", c);
+    char BMS3_TEST_Glue_L[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\Latex";
+    c = Fake(BMS3_TEST_Glue_L, filename, "BMS3", "Glue", "R", "None", "None", "R", c);
+    char BMS3_TEST_Glue_P[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\Paper";
+    c = Fake(BMS3_TEST_Glue_P, filename, "BMS3", "Glue", "P", "None", "None", "R", c);
+    char BMS3_TEST_Glue_Si_S[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\Silicone_skintone";
+    c = Fake(BMS3_TEST_Glue_Si_S, filename, "BMS3", "Glue", "Si", "S", "None", "R", c);
+    char BMS3_TEST_Glue_Si_T[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\Silicone_trans";
+    c = Fake(BMS3_TEST_Glue_Si_T, filename, "BMS3", "Glue", "Si", "T", "None", "R", c);
+    char BMS3_TEST_Glue_Si_W[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\Silicone_white";
+    c = Fake(BMS3_TEST_Glue_Si_W, filename, "BMS3", "Glue", "Si", "W", "None", "R", c);
+    char BMS3_TEST_Glue_V[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\Vytaflex_031";
+    c = Fake(BMS3_TEST_Glue_V, filename, "BMS3", "Glue", "V", "None", "None", "R", c);
+    char BMS3_TEST_Glue_G[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\Woodglue";
+    c = Fake(BMS3_TEST_Glue_G, filename, "BMS3", "Glue", "G", "None", "None", "R", c); */
+
+    /*  FAKE 3D 
+    char BMS3_TEST_3D_B[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\3D_Bodydouble";
+    c = Fake(BMS3_TEST_3D_B, filename, "BMS3", "3D", "B", "None", "None", "R", c);
+    char BMS3_TEST_3D_Si2_S[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\3D_Ecoflex_skintone";
+    c = Fake(BMS3_TEST_3D_Si2_S, filename, "BMS3", "3D", "Si2", "S", "None", "R", c);
+    char BMS3_TEST_3D_Si2_T[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\3D_Ecoflex_trans";
+    c = Fake(BMS3_TEST_3D_Si2_T, filename, "BMS3", "3D", "Si2", "T", "None", "R", c);
+    char BMS3_TEST_3D_Si2_W[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\3D_Ecoflex_white";
+    c = Fake(BMS3_TEST_3D_Si2_W, filename, "BMS3", "3D", "Si2", "W", "None", "R", c);
+    char BMS3_TEST_3D_PDMS[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\3D_PDMS";
+    c = Fake(BMS3_TEST_3D_PDMS, filename, "BMS3", "3D", "PDMS", "None", "None", "R", c);
+    char BMS3_TEST_3D_R[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\3D_Rubber";
+    c = Fake(BMS3_TEST_3D_R, filename, "BMS3", "3D", "R", "None", "None", "R", c);
+    char BMS3_TEST_3D_Si_S[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\3D_Silicone_skintone";
+    c = Fake(BMS3_TEST_3D_Si_S, filename, "BMS3", "3D", "Si", "S", "None", "R", c);
+    char BMS3_TEST_3D_Si_T[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\3D_Silicone_trans";
+    c = Fake(BMS3_TEST_3D_Si_T, filename, "BMS3", "3D", "Si", "T", "None", "R", c);
+    char BMS3_TEST_3D_Si_W[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\3D_Silicone_white";
+    c = Fake(BMS3_TEST_3D_Si_W, filename, "BMS3", "3D", "Si", "W", "None", "R", c); */
+
+    /*  FAKE PC  
+    char BMS3_TEST_PC_B[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\PC_Bodydouble";
+    c = Fake(BMS3_TEST_PC_B, filename, "BMS3", "PC", "B", "None", "None", "R", c);
+    char BMS3_TEST_PC_D[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\PC_DragonSkin";
+    c = Fake(BMS3_TEST_PC_D, filename, "BMS3", "PC", "D", "None", "None", "R", c);
+    char BMS3_TEST_PC_Si2_S[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\PC_Ecoflex_skintone";
+    c = Fake(BMS3_TEST_PC_Si2_S, filename, "BMS3", "PC", "Si2", "S", "None", "R", c);
+    char BMS3_TEST_PC_Si2_W[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\PC_Ecoflex_white";
+    c = Fake(BMS3_TEST_PC_Si2_W, filename, "BMS3", "PC", "Si2", "W", "None", "R", c);
+    char BMS3_TEST_PC_PDMS[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\PC_PDMS";
+    c = Fake(BMS3_TEST_PC_PDMS, filename, "BMS3", "PC", "PDMS", "None", "None", "R", c);
+    char BMS3_TEST_PC_R[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\PC_Rubber";
+    c = Fake(BMS3_TEST_PC_R, filename, "BMS3", "PC", "R", "None", "None", "R", c);
+    char BMS3_TEST_PC_Si_S[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\PC_Silicone_skintone";
+    c = Fake(BMS3_TEST_PC_Si_S, filename, "BMS3", "PC", "Si", "S", "None", "R", c);
+    char BMS3_TEST_PC_Si_T[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\PC_Silicone_trans";
+    c = Fake(BMS3_TEST_PC_Si_T, filename, "BMS3", "PC", "Si", "T", "None", "R", c);
+    char BMS3_TEST_PC_Si_W[_MAX_PATH] = "C:\\Users\\User\\Desktop\\DB\\BioMini Slim\\Test\\Fake\\PC_Silicone_white";
+    c = Fake(BMS3_TEST_PC_Si_W, filename, "BMS3", "PC", "Si", "W", "None", "R", c);*/
+
+    return 0;
+}
